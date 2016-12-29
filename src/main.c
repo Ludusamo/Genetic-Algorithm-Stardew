@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "organism.h"
+#include "error.h"
 
 int main() {
 	printf("Stardew Valley Genetic Algorithm\n");
