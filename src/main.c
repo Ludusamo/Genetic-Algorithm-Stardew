@@ -11,10 +11,13 @@ int main() {
 	Organism *o1 = malloc(sizeof(Organism));
 	init_organism(o);
 	init_organism(o1);
-	randomize_organism(o, 25);
-	randomize_organism(o1, 25);
+	randomize_organism(o, 0.25);
+	randomize_organism(o1, 0.25);
 	print_organism(o);
 	cross_organisms(o, o1);
+	printf("\n");
+	print_organism(o);
+	mutate_organism(o, 1);
 	printf("\n");
 	print_organism(o);
 	deinit_organism(o);

@@ -14,10 +14,10 @@ void deinit_organism(Organism *o) {
 	}
 }
 
-void randomize_organism(Organism *o, int percentage) {
+void randomize_organism(Organism *o, double percentage) {
 	if (!o) throw_error("Organism is not initialized");
 	for (int i = 0; i < o->data_length; i++) {
-		if (rand() % 100 < percentage) o->data[i] = 1;
+		if (rand() / (double) RAND_MAX < percentage) o->data[i] = 1;
 		else o->data[i] = 0;
 	}
 }
@@ -28,6 +28,13 @@ void cross_organisms(Organism *a, Organism *b) {
 		int temp = a->data[i];
 		a->data[i] = b->data[i];
 		b->data[i] = temp;
+	}
+}
+
+void mutate_organism(Organism *o, double mutation_rate) {
+	for (int i = 0; i < o->data_length; i++) {
+		if (rand() / (double) RAND_MAX < mutation_rate)
+			o->data[i] = !o->data[i];
 	}
 }
 
