@@ -2,16 +2,16 @@
 #include <stdlib.h>
 #include <time.h>
 #include "organism.h"
+#include "population.h"
 #include "error.h"
 
 int main() {
 	srand(time(NULL));
 	printf("Stardew Valley Genetic Algorithm\n");
-	Organism *o = malloc(sizeof(Organism));
-	init_organism(o);
-	randomize_organism(o, 0.25);
-	print_organism(o);
-	printf("%d\n", organism_fitness(o));
-	deinit_organism(o);
+	Population *p = malloc(sizeof(Population));
+	init_population(p, 10);
+	populate(p);
+	print_organism(&p->organisms[0]);
+	deinit_population(p);
 	return 0;
 }
