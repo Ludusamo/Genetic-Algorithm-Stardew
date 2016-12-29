@@ -22,6 +22,15 @@ void randomize_organism(Organism *o, int percentage) {
 	}
 }
 
+void cross_organisms(Organism *a, Organism *b) {
+	int crossover_pos = rand() % a->data_length;
+	for (int i = crossover_pos; i < a->data_length; i++) {
+		int temp = a->data[i];
+		a->data[i] = b->data[i];
+		b->data[i] = temp;
+	}
+}
+
 void print_organism(Organism *o) {
 	if (!o) throw_error("Organism is not initialized");
 	for (int y = 0; y < AREA_WIDTH; y++) {

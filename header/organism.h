@@ -14,6 +14,7 @@ typedef struct {
 void init_organism(Organism *o);
 void deinit_organism(Organism *o);
 void randomize_organism(Organism *o, int percentage);
+void cross_organisms(Organism *a, Organism *b);
 void print_organism(Organism *o);
 
 #endif // ORGANISM_H
