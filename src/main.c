@@ -5,20 +5,23 @@
 #include "population.h"
 #include "error.h"
 
+#define FINAL_GEN 1000
+#define INTERVAL 100
+
 int main() {
 	srand(time(NULL));
 	printf("Stardew Valley Genetic Algorithm\n");
 	Population *p = malloc(sizeof(Population));
-	init_population(p, 2);
+	init_population(p, 100);
 	populate(p);
-	for (int i = 0; i < 2; i++) {
-		print_organism(&p->organisms[i]);
-		printf("\n");
-	}
-	breed(p);
-	for (int i = 0; i < 2; i++) {
-		print_organism(&p->organisms[i]);
-		printf("\n");
+	for (int i = 0; i < FINAL_GEN; i++) {
+		breed(p);
+		if ((i + 1) % INTERVAL == 0) {
+			Organism *best = best_organism(p);
+			printf("Generation %d\nBest Fitness %d\n", i + 1, organism_fitness(best));
+			print_organism(best);
+			printf("\n");
+		}
 	}
 	deinit_population(p);
 	return 0;

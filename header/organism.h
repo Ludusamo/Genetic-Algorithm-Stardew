@@ -2,6 +2,7 @@
 #define ORGANISM_H
 
 #include <stdlib.h>
+#include <string.h>
 #include "error.h"
 
 #define AREA_WIDTH 17
@@ -9,6 +10,7 @@
 typedef struct {
 	int *data;
 	int data_length;
+	int fitness;
 } Organism;
 
 void init_organism(Organism *o);

@@ -4,6 +4,7 @@ void init_organism(Organism *o) {
 	if (!o) throw_error("Organism is not allocated in memory");
 	o->data = calloc(AREA_WIDTH * AREA_WIDTH, sizeof(int));
 	o->data_length = AREA_WIDTH * AREA_WIDTH;
+	o->fitness = -1;
 }
 
 void deinit_organism(Organism *o) {
@@ -29,6 +30,8 @@ void cross_organisms(Organism *a, Organism *b) {
 		a->data[i] = b->data[i];
 		b->data[i] = temp;
 	}
+	a->fitness = -1;
+	b->fitness = -1;
 }
 
 void mutate_organism(Organism *o, double mutation_rate) {
@@ -36,6 +39,7 @@ void mutate_organism(Organism *o, double mutation_rate) {
 		if (rand() / (double) RAND_MAX < mutation_rate)
 			o->data[i] = !o->data[i];
 	}
+	o->fitness = -1;
 }
 
 int _has_adj(Organism *o, int pos, int adj_val) {
@@ -58,15 +62,17 @@ int _has_adj(Organism *o, int pos, int adj_val) {
 }
 
 int organism_fitness(Organism *o) {
-	int fitness = 0;
-	for (int i = 0; i < o->data_length; i++) {
-		if (o->data[i] == 0) {
-			if (_has_adj(o, i, 1)) {
-				fitness++;
+	if (o->fitness == -1) {
+		o->fitness = 0;
+		for (int i = 0; i < o->data_length; i++) {
+			if (o->data[i] == 0) {
+				if (_has_adj(o, i, 1)) {
+					o->fitness++;
+				}
 			}
 		}
 	}
-	return fitness;
+	return o->fitness;
 }
 
 void print_organism(Organism *o) {
@@ -82,8 +88,6 @@ void print_organism(Organism *o) {
 Organism *copy_organism(Organism *o) {
 	Organism *new = malloc(sizeof(Organism));
 	init_organism(new);
-	for (int i = 0; i < o->data_length; i++) {
-		new->data[i] = o->data[i];
-	}
+	memcpy(new->data, o->data, AREA_WIDTH * AREA_WIDTH * sizeof(int));
 	return new;
 }

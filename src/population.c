@@ -31,13 +31,16 @@ uint64_t _total_fitness(Population *p) {
 }
 
 Organism *_select_organisms_at_fitness(Population *p, uint64_t chosen) {
-	int total = 0;
+	uint64_t total = 0;
 	for (int i = 0; i < p->num_organisms; i++) {
 		total += organism_fitness(&p->organisms[i]);
 		if (total >= chosen) {
 			return &p->organisms[i];
 		}
 	}
+	char *error = malloc(255);
+	sprintf(error, "Organism could not be found with: %lu", chosen);
+	throw_error(error);
 	return NULL;
 }
 
@@ -48,8 +51,8 @@ void breed(Population *p) {
 	while (num_organisms < p->num_organisms) {
 		uint64_t selection1 = rand() % total_fitness;
 		uint64_t selection2 = rand() % total_fitness;
-		Organism *a = _select_organisms_at_fitness(p, selection1);
-		Organism *b = _select_organisms_at_fitness(p, selection2);
+		Organism *a = copy_organism(_select_organisms_at_fitness(p, selection1));
+		Organism *b = copy_organism(_select_organisms_at_fitness(p, selection2));
 		if (rand() / (double) RAND_MAX < CROSSOVER_RATE)
 			cross_organisms(a, b);
 		mutate_organism(a, 0.001);
@@ -57,6 +60,16 @@ void breed(Population *p) {
 		new_population[num_organisms++] = *a;
 		new_population[num_organisms++] = *b;
 	}
-	free(p->organisms);
 	p->organisms = new_population;
+}
+
+Organism *best_organism(Population *p) {
+	int best_index = 0;	
+	for (int i = 0; i < p->num_organisms; i++) {
+		if (organism_fitness(&p->organisms[best_index]) 
+				< organism_fitness(&p->organisms[i])) {
+			best_index = i;
+		}
+	}
+	return &p->organisms[best_index];
 }

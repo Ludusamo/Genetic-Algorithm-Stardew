@@ -2,9 +2,10 @@
 #define POPULATION_H
 
 #include "organism.h"
+#include "error.h"
 #include <stdint.h>
 
-#define RANDOMIZATION_CHANCE 0.25
+#define RANDOMIZATION_CHANCE 0.75
 #define CROSSOVER_RATE 0.7
 
 typedef struct {
@@ -19,5 +20,6 @@ void populate(Population *p);
 uint64_t _total_fitness(Population *p);
 Organism *_select_organisms_at_fitness(Population *p, uint64_t chosen);
 void breed(Population *p);
+Organism *best_organism(Population *p);
 
 #endif // POPULATION_H
