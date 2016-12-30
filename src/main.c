@@ -4,6 +4,7 @@
 #include "organism.h"
 #include "population.h"
 #include "error.h"
+#include "ui.h"
 
 #define FINAL_GEN 1000
 #define INTERVAL 100
@@ -11,6 +12,9 @@
 int main() {
 	srand(time(NULL));
 	printf("Stardew Valley Genetic Algorithm\n");
+	UI *ui = malloc(sizeof(UI));
+	init_ui(ui);
+
 	Population *p = malloc(sizeof(Population));
 	init_population(p, 100);
 	populate(p);
@@ -24,5 +28,6 @@ int main() {
 		}
 	}
 	deinit_population(p);
+	deinit_ui(ui);
 	return 0;
 }
