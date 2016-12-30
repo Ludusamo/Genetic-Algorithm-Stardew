@@ -78,3 +78,12 @@ void print_organism(Organism *o) {
 		printf("\n");
 	}
 }
+
+Organism *copy_organism(Organism *o) {
+	Organism *new = malloc(sizeof(Organism));
+	init_organism(new);
+	for (int i = 0; i < o->data_length; i++) {
+		new->data[i] = o->data[i];
+	}
+	return new;
+}

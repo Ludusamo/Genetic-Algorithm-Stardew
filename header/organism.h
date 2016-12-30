@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "error.h"
 
-#define AREA_WIDTH 5
+#define AREA_WIDTH 17
 
 typedef struct {
 	int *data;
@@ -19,5 +19,7 @@ void mutate_organism(Organism *o, double mutation_rate);
 int _has_adj(Organism *o, int pos, int adj_val);
 int organism_fitness(Organism *o);
 void print_organism(Organism *o);
+
+Organism *copy_organism(Organism *o);
 
 #endif // ORGANISM_H
