@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "error.h"
 
-#define AREA_WIDTH 3
+#define AREA_WIDTH 5
 
 typedef struct {
 	int *data;
