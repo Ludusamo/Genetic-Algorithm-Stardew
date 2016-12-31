@@ -7,7 +7,7 @@
 #include "ui.h"
 #include "SDL2/SDL.h"
 
-#define FINAL_GEN 1000
+#define FINAL_GEN 100000
 #define INTERVAL 100
 
 int main() {
@@ -16,22 +16,23 @@ int main() {
 	UI *ui = malloc(sizeof(UI));
 	init_ui(ui);
 	load_font(ui->text, "res/Roboto-Regular.ttf");
-	set_text_position(ui->text, 32, 32);
+	set_text_position(ui->text, 0, 0);
 
 	Population *p = malloc(sizeof(Population));
 	init_population(p, 100);
 	populate(p);
+	Organism *best = copy_organism(best_organism(p));
 	for (int i = 0; i < FINAL_GEN; i++) {
 		breed(p);
-		if ((i + 1) % INTERVAL == 0) {
-			Organism *best = best_organism(p);
-			printf("Generation %d\nBest Fitness %d\n", i + 1, organism_fitness(best));
-			print_organism(best);
-			printf("\n");
+		Organism *cur_best = best_organism(p);
+		if (organism_fitness(cur_best) > organism_fitness(best)) {
+			best = copy_organism(cur_best);
 		}
+		load_tile_data(ui, best->data);
+
 		SDL_Color text_color = {0, 0, 0};
 		char text[255];
-		sprintf(text, "Generation: %d", i);
+		sprintf(text, "Generation: %d\nBest Fitness: %d\n", i, organism_fitness(best));
 		load_text(ui->text, ui->renderer, text, text_color);
 		draw_ui(ui);
 	}

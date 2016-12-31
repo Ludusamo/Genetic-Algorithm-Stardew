@@ -5,8 +5,9 @@
 #include "error.h"
 #include <stdint.h>
 
-#define RANDOMIZATION_CHANCE 0.75
-#define CROSSOVER_RATE 0.7
+#define RANDOMIZATION_CHANCE 0.25
+#define CROSSOVER_RATE 0.5
+#define MUTATION_CHANCE 0.001
 
 typedef struct {
 	int num_organisms;

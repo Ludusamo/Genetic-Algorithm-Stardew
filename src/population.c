@@ -55,7 +55,7 @@ void breed(Population *p) {
 		Organism *b = copy_organism(_select_organisms_at_fitness(p, selection2));
 		if (rand() / (double) RAND_MAX < CROSSOVER_RATE)
 			cross_organisms(a, b);
-		mutate_organism(a, 0.001);
+		mutate_organism(a, MUTATION_CHANCE);
 		mutate_organism(b, 0.001);
 		new_population[num_organisms++] = *a;
 		new_population[num_organisms++] = *b;

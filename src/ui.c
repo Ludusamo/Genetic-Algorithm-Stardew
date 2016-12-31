@@ -16,6 +16,15 @@ void init_ui(UI *ui) {
 		throw_error("Window could not be created!");
 	}
 	ui->renderer = SDL_CreateRenderer(ui->win, -1, SDL_RENDERER_ACCELERATED);
+
+	ui->tiles = calloc(AREA_WIDTH * AREA_WIDTH, sizeof(Tile));
+	int size = (SCREEN_WIDTH - 64) / AREA_WIDTH;
+	for (int y = 0; y < AREA_WIDTH; y++) {
+		for (int x = 0; x < AREA_WIDTH; x++) {
+			set_tile_pos(&ui->tiles[y * AREA_WIDTH + x], 32 + x * size, 32 + y * size);
+			set_tile_size(&ui->tiles[y * AREA_WIDTH + x], size, size);
+		}
+	}
 }
 
 void deinit_ui(UI *ui) {
@@ -38,8 +47,23 @@ void clear_ui(UI *ui) {
 void draw_ui(UI *ui) {
 	if (!ui) throw_error("UI object is not allocated in memory");
 	clear_ui(ui);
+	for (int i = 0; i < AREA_WIDTH * AREA_WIDTH; i++) {
+		render_tile(&ui->tiles[i], ui->renderer);
+	}
 	render_text(ui->text, ui->renderer);
 	SDL_RenderPresent(ui->renderer);
+}
+
+void load_tile_data(UI *ui, int *data) {
+	for (int i = 0; i < AREA_WIDTH * AREA_WIDTH; i++) {
+		if (data[i] == 0) {
+			SDL_Color color = { 0x59, 0x2e, 0x03, 0xff };
+			set_tile_color(&ui->tiles[i], color);
+		} else if (data[i] == 1) {
+			SDL_Color color = { 0xff, 0x00, 0x00, 0xff };
+			set_tile_color(&ui->tiles[i], color);
+		}
+	}
 }
 
 void set_text_position(Text *text, int x, int y) {
@@ -78,6 +102,25 @@ void deinit_text(Text *text) {
 }
 
 void render_text(Text *text, SDL_Renderer *renderer) {
-	SDL_Rect renderQuad = { text->x, text->y, text->width, text->height };
-	SDL_RenderCopy(renderer, text->texture, NULL, &renderQuad);
+	SDL_Rect render_quad = { text->x, text->y, text->width, text->height };
+	SDL_RenderCopy(renderer, text->texture, NULL, &render_quad);
+}
+
+void set_tile_pos(Tile *tile, int x, int y) {
+	tile->rect.x = x;
+	tile->rect.y = y;
+}
+
+void set_tile_size(Tile *tile, int width, int height) {
+	tile->rect.w = width;
+	tile->rect.h = height;
+}
+
+void set_tile_color(Tile *tile, SDL_Color color) {
+	tile->color = color;
+}
+
+void render_tile(Tile *tile, SDL_Renderer *renderer) {
+	SDL_SetRenderDrawColor(renderer, tile->color.r, tile->color.g, tile->color.b, tile->color.a);
+	SDL_RenderFillRect(renderer, &tile->rect);
 }
