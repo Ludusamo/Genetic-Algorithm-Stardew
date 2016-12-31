@@ -5,6 +5,7 @@
 #include "population.h"
 #include "error.h"
 #include "ui.h"
+#include "SDL2/SDL.h"
 
 #define FINAL_GEN 1000
 #define INTERVAL 100
@@ -14,6 +15,8 @@ int main() {
 	printf("Stardew Valley Genetic Algorithm\n");
 	UI *ui = malloc(sizeof(UI));
 	init_ui(ui);
+	load_font(ui->text, "res/Roboto-Regular.ttf");
+	set_text_position(ui->text, 32, 32);
 
 	Population *p = malloc(sizeof(Population));
 	init_population(p, 100);
@@ -26,6 +29,11 @@ int main() {
 			print_organism(best);
 			printf("\n");
 		}
+		SDL_Color text_color = {0, 0, 0};
+		char text[255];
+		sprintf(text, "Generation: %d", i);
+		load_text(ui->text, ui->renderer, text, text_color);
+		draw_ui(ui);
 	}
 	deinit_population(p);
 	deinit_ui(ui);
