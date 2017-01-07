@@ -4,25 +4,47 @@
 #include "organism.h"
 #include "population.h"
 #include "error.h"
-
-#define FINAL_GEN 1000
-#define INTERVAL 100
+#include "ui.h"
+#include "SDL2/SDL.h"
 
 int main() {
 	srand(time(NULL));
 	printf("Stardew Valley Genetic Algorithm\n");
+	UI *ui = malloc(sizeof(UI));
+	init_ui(ui);
+	load_font(ui->text, "res/Roboto-Regular.ttf");
+	set_text_position(ui->text, 0, 0);
+
 	Population *p = malloc(sizeof(Population));
 	init_population(p, 100);
 	populate(p);
-	for (int i = 0; i < FINAL_GEN; i++) {
-		breed(p);
-		if ((i + 1) % INTERVAL == 0) {
-			Organism *best = best_organism(p);
-			printf("Generation %d\nBest Fitness %d\n", i + 1, organism_fitness(best));
-			print_organism(best);
-			printf("\n");
+	Organism *best = copy_organism(best_organism(p));
+
+	int quit = 0;
+	int gen_count = 1;
+	SDL_Event e;
+	while (!quit) {
+		while (SDL_PollEvent(&e) != 0) {
+			if (e.type == SDL_QUIT) {
+				quit = 1;
+			}
 		}
+
+		breed(p);
+		gen_count += 1;
+		Organism *cur_best = best_organism(p);
+		if (organism_fitness(cur_best) > organism_fitness(best)) {
+			best = copy_organism(cur_best);
+		}
+		load_tile_data(ui, best->data);
+
+		SDL_Color text_color = {0, 0, 0};
+		char text[255];
+		sprintf(text, "Generation: %d\nBest Fitness: %d\n", gen_count, organism_fitness(best));
+		load_text(ui->text, ui->renderer, text, text_color);
+		draw_ui(ui);
 	}
 	deinit_population(p);
+	deinit_ui(ui);
 	return 0;
 }
