@@ -57,8 +57,13 @@ void draw_ui(UI *ui) {
 void load_tile_data(UI *ui, int *data) {
 	for (int i = 0; i < AREA_WIDTH * AREA_WIDTH; i++) {
 		if (data[i] == 0) {
-			SDL_Color color = { 0x59, 0x2e, 0x03, 0xff };
-			set_tile_color(&ui->tiles[i], color);
+			if (has_adj(data, i, 1)) {
+				SDL_Color color = { 0x60, 0x98, 0xf2, 0xff };
+				set_tile_color(&ui->tiles[i], color);
+			} else {
+				SDL_Color color = { 0x59, 0x2e, 0x03, 0xff };
+				set_tile_color(&ui->tiles[i], color);
+			}
 		} else if (data[i] == 1) {
 			SDL_Color color = { 0xff, 0x00, 0x00, 0xff };
 			set_tile_color(&ui->tiles[i], color);
