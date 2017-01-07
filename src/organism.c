@@ -24,11 +24,13 @@ void randomize_organism(Organism *o, double percentage) {
 }
 
 void cross_organisms(Organism *a, Organism *b) {
-	int crossover_pos = rand() % a->data_length;
-	for (int i = crossover_pos; i < a->data_length; i++) {
-		int temp = a->data[i];
-		a->data[i] = b->data[i];
-		b->data[i] = temp;
+	double swap_chance = rand() / (double) RAND_MAX;
+	for (int i = 0; i < a->data_length; i++) {
+		if (rand() / (double) RAND_MAX < swap_chance) {
+			int temp = a->data[i];
+			a->data[i] = b->data[i];
+			b->data[i] = temp;
+		}
 	}
 	a->fitness = -1;
 	b->fitness = -1;
