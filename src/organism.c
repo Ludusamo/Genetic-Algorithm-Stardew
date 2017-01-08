@@ -75,9 +75,9 @@ int organism_fitness(Organism *o) {
 	return o->fitness;
 }
 
-int organism_compare(Organism *o1, Organism *o2) {
-	int a = organism_fitness(o1);
-	int b = organism_fitness(o1);
+int organism_compare(const void *o1, const void *o2) {
+	int a = organism_fitness((Organism *) o1);
+	int b = organism_fitness((Organism *) o2);
 	if (a > b) return 1;
 	if (a < b) return -1;
 	return 0;
