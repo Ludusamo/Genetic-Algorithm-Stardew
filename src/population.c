@@ -46,7 +46,15 @@ Organism *_select_organisms_at_fitness(Population *p, uint64_t chosen) {
 
 void breed(Population *p) {
 	Organism *new_population = calloc(p->num_organisms, sizeof(Organism));
-	int num_organisms = 0;
+
+	int num_keep = (int) (p->num_organisms * TOP_PERCENT_KEPT);
+	qsort(p->organisms, p->num_organisms, sizeof(Organism), organism_compare);
+	for (int i = 0; i < num_keep; i++)  {
+		Organism *o = copy_organism(&p->organisms[p->num_organisms - (i + 1)]);
+		new_population[i] = *o;
+	}
+
+	int num_organisms = num_keep - 1;
 	uint64_t total_fitness = _total_fitness(p);
 	while (num_organisms < p->num_organisms) {
 		uint64_t selection1 = rand() % total_fitness;
