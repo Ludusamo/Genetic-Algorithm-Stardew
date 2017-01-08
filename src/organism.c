@@ -77,6 +77,14 @@ int organism_fitness(Organism *o) {
 	return o->fitness;
 }
 
+int organism_compare(const void *o1, const void *o2) {
+	int a = organism_fitness((Organism *) o1);
+	int b = organism_fitness((Organism *) o2);
+	if (a > b) return 1;
+	if (a < b) return -1;
+	return 0;
+}
+
 void print_organism(Organism *o) {
 	if (!o) throw_error("Organism is not initialized");
 	for (int y = 0; y < AREA_WIDTH; y++) {

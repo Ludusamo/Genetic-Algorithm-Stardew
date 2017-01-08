@@ -20,6 +20,7 @@ void cross_organisms(Organism *a, Organism *b);
 void mutate_organism(Organism *o, double mutation_rate);
 int _has_adj(Organism *o, int pos, int adj_val);
 int organism_fitness(Organism *o);
+int organism_compare(const void *o1, const void *o2);
 void print_organism(Organism *o);
 
 Organism *copy_organism(Organism *o);
