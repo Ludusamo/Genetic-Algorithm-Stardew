@@ -8,6 +8,7 @@
 #define RANDOMIZATION_CHANCE 0.25
 #define CROSSOVER_RATE 0.5
 #define MUTATION_CHANCE 0.001
+#define TOP_PERCENT_KEPT 0.05
 
 typedef struct {
 	int num_organisms;
