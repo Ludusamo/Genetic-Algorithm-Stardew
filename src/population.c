@@ -5,7 +5,7 @@ void init_population(Population *p, int population_size) {
 	p->num_organisms = population_size;
 	p->organisms = calloc(p->num_organisms, sizeof(Organism));
 	for (int i = 0; i < p->num_organisms; i++) {
-		p->organisms[0] = create_organism();
+		p->organisms[i] = create_organism();
 	}
 }
 
@@ -50,24 +50,25 @@ void breed(Population *p) {
 	Organism *new_population = calloc(p->num_organisms, sizeof(Organism));
 
 	int num_keep = (int) (p->num_organisms * TOP_PERCENT_KEPT);
+	num_keep = (num_keep % 2 == 0) ? num_keep : num_keep + 1;
 	qsort(p->organisms, p->num_organisms, sizeof(Organism), organism_compare);
 	for (int i = 0; i < num_keep; i++)  {
 		new_population[i] = p->organisms[p->num_organisms - (i + 1)];
 	}
 
-	int num_organisms = num_keep - 1;
+	int pop_count = num_keep;
 	uint64_t total_fitness = _total_fitness(p);
-	while (num_organisms < p->num_organisms) {
+	while (pop_count< p->num_organisms) {
 		uint64_t selection1 = rand() % total_fitness;
 		uint64_t selection2 = rand() % total_fitness;
-		Organism a = _select_organisms_at_fitness(p, selection1);
-		Organism b = _select_organisms_at_fitness(p, selection2);
+		new_population[pop_count++] = _select_organisms_at_fitness(p, selection1);
+		new_population[pop_count++] = _select_organisms_at_fitness(p, selection2);
+		Organism *a = &new_population[pop_count - 2];
+		Organism *b = &new_population[pop_count - 1];
 		if (rand() / (double) RAND_MAX < CROSSOVER_RATE)
-			cross_organisms(&a, &b);
-		mutate_organism(&a, MUTATION_CHANCE);
-		mutate_organism(&b, 0.001);
-		new_population[num_organisms++] = a;
-		new_population[num_organisms++] = b;
+			cross_organisms(a, b);
+		mutate_organism(a, MUTATION_CHANCE);
+		mutate_organism(b, MUTATION_CHANCE);
 	}
 	Organism *old_population = p->organisms;
 	p->organisms = new_population;

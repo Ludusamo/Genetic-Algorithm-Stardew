@@ -16,7 +16,7 @@ int main() {
 	set_text_position(ui->text, 0, 0);
 
 	Population *p = malloc(sizeof(Population));
-	init_population(p, 100);
+	init_population(p, 1000);
 	populate(p);
 	Organism best = best_organism(p);
 
