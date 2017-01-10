@@ -1,22 +1,13 @@
 #include "organism.h"
 
-void init_organism(Organism *o) {
-	if (!o) throw_error("Organism is not allocated in memory");
-	o->data = calloc(AREA_WIDTH * AREA_WIDTH, sizeof(int));
-	o->data_length = AREA_WIDTH * AREA_WIDTH;
-	o->fitness = -1;
-}
-
-void deinit_organism(Organism *o) {
-	if (o) {
-		free(o->data);
-		free(o);
-		o = 0;
-	}
+Organism create_organism() {
+	Organism o;
+	o.data_length = AREA_WIDTH * AREA_WIDTH;
+	o.fitness = -1;
+	return o;
 }
 
 void randomize_organism(Organism *o, double percentage) {
-	if (!o) throw_error("Organism is not initialized");
 	for (int i = 0; i < o->data_length; i++) {
 		if (rand() / (double) RAND_MAX < percentage) o->data[i] = 1;
 		else o->data[i] = 0;
@@ -78,26 +69,18 @@ int organism_fitness(Organism *o) {
 }
 
 int organism_compare(const void *o1, const void *o2) {
-	int a = organism_fitness((Organism *) o1);
-	int b = organism_fitness((Organism *) o2);
+	int a = organism_fitness((Organism *)o1);
+	int b = organism_fitness((Organism *)o2);
 	if (a > b) return 1;
 	if (a < b) return -1;
 	return 0;
 }
 
 void print_organism(Organism *o) {
-	if (!o) throw_error("Organism is not initialized");
 	for (int y = 0; y < AREA_WIDTH; y++) {
 		for (int x = 0; x < AREA_WIDTH; x++) {
 			printf("%d", o->data[AREA_WIDTH * y + x]);
 		}
 		printf("\n");
 	}
-}
-
-Organism *copy_organism(Organism *o) {
-	Organism *new = malloc(sizeof(Organism));
-	init_organism(new);
-	memcpy(new->data, o->data, AREA_WIDTH * AREA_WIDTH * sizeof(int));
-	return new;
 }
