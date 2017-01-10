@@ -69,7 +69,9 @@ void breed(Population *p) {
 		new_population[num_organisms++] = a;
 		new_population[num_organisms++] = b;
 	}
+	Organism *old_population = p->organisms;
 	p->organisms = new_population;
+	free(old_population);
 }
 
 Organism best_organism(Population *p) {
