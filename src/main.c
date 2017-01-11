@@ -16,9 +16,9 @@ int main() {
 	set_text_position(ui->text, 0, 0);
 
 	Population *p = malloc(sizeof(Population));
-	init_population(p, 100);
+	init_population(p, 1000);
 	populate(p);
-	Organism *best = copy_organism(best_organism(p));
+	Organism best = best_organism(p);
 
 	int quit = 0;
 	int gen_count = 1;
@@ -32,15 +32,15 @@ int main() {
 
 		breed(p);
 		gen_count += 1;
-		Organism *cur_best = best_organism(p);
-		if (organism_fitness(cur_best) > organism_fitness(best)) {
-			best = copy_organism(cur_best);
+		Organism cur_best = best_organism(p);
+		if (organism_fitness(&cur_best) > organism_fitness(&best)) {
+			best = cur_best;
 		}
-		load_tile_data(ui, best->data);
+		load_tile_data(ui, best.data);
 
 		SDL_Color text_color = {0, 0, 0};
 		char text[255];
-		sprintf(text, "Generation: %d\nBest Fitness: %d\n", gen_count, organism_fitness(best));
+		sprintf(text, "Generation: %d\nBest Fitness: %d\n", gen_count, organism_fitness(&best));
 		load_text(ui->text, ui->renderer, text, text_color);
 		draw_ui(ui);
 	}

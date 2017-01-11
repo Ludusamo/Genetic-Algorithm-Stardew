@@ -20,8 +20,8 @@ void deinit_population(Population *p);
 
 void populate(Population *p);
 uint64_t _total_fitness(Population *p);
-Organism *_select_organisms_at_fitness(Population *p, uint64_t chosen);
+Organism _select_organisms_at_fitness(Population *p, uint64_t chosen);
 void breed(Population *p);
-Organism *best_organism(Population *p);
+Organism best_organism(Population *p);
 
 #endif // POPULATION_H
