@@ -37,16 +37,15 @@ void update(void *p) {
 	}
 	load_tile_data(a->ui, a->best.data);
 
-	SDL_Color text_color = {0, 0, 0};
-	char text[255];
-	sprintf(text, "Generation: %d\nBest Fitness: %d\n", a->gen_count, organism_fitness(&a->best));
+	SDL_Color text_color = {0, 0, 0}; char text[255]; sprintf(text, "Generation: %d\nBest Fitness: %d\n", a->gen_count, organism_fitness(&a->best));
 	load_text(a->ui->text, a->ui->renderer, text, text_color);
 	draw_ui(a->ui);	
 }
 
 int main() {
 	srand(time(NULL));
-	printf("Stardew Valley Genetic Algorithm\n");
+	printf("Stardew Valley Genetic Algorithm\n");	
+
 	Application app;
 	app.quit = 0;
 	app.gen_count = 1;
@@ -64,8 +63,16 @@ int main() {
 #ifdef __EMSCRIPTEN__
 	emscripten_set_main_loop_arg((em_arg_callback_func) update, &app, 0, 1);
 #else
+	int prev_ticks = SDL_GetTicks();
+	int cur_ticks = SDL_GetTicks();
+	int fps = 60;
+	int ticks_per_frame = 1000 / fps;
 	while (!app.quit) {
-		update(&app);
+		cur_ticks = SDL_GetTicks();
+		if (cur_ticks - prev_ticks >= ticks_per_frame) {
+			update(&app);
+			prev_ticks = cur_ticks;
+		}
 	}
 #endif	
 	deinit_population(app.p);
