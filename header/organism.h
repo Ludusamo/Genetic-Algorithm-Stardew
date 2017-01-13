@@ -20,6 +20,7 @@ void mutate_organism(Organism *o, double mutation_rate);
 int has_adj(int *data, int pos, int adj_val);
 int organism_fitness(Organism *o);
 int organism_compare(const void *o1, const void *o2);
+void organism_block(Organism *o);
 void print_organism(Organism *o);
 
 #endif // ORGANISM_H
