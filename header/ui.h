@@ -17,10 +17,11 @@
 #define SCREEN_HEIGHT 640
 
 SDL_Texture *tile_textures[4];
+enum Tiles { DIRT, WATERED, SPRINKLER, GROUND };
 
 typedef struct {
 	SDL_Rect rect;
-	SDL_Color color;
+	SDL_Texture *tex;
 } Tile;
 
 typedef struct {
@@ -58,7 +59,7 @@ void render_text(Text *text, SDL_Renderer *renderer);
 
 void set_tile_pos(Tile *tile, int x, int y);
 void set_tile_size(Tile *tile, int width, int height);
-void set_tile_color(Tile *tile, SDL_Color color);
+void set_tile_tex(Tile *tile, SDL_Texture *tex);
 void render_tile(Tile *tile, SDL_Renderer *renderer);
 
 #endif // UI_H

@@ -49,7 +49,7 @@ void deinit_ui(UI *ui) {
 
 void clear_ui(UI *ui) {
 	if (!ui) throw_error("UI object is not allocated in memory");
-	SDL_SetRenderDrawColor(ui->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawColor(ui->renderer, 0x00, 0x00, 0x00, 0xFF);
 	SDL_RenderClear(ui->renderer);
 }
 
@@ -77,15 +77,12 @@ void load_tile_data(UI *ui, int *data) {
 	for (int i = 0; i < AREA_WIDTH * AREA_WIDTH; i++) {
 		if (data[i] == 0) {
 			if (has_adj(data, i, 1)) {
-				SDL_Color color = { 0x60, 0x98, 0xf2, 0xff };
-				set_tile_color(&ui->tiles[i], color);
+				set_tile_tex(&ui->tiles[i], tile_textures[WATERED]);
 			} else {
-				SDL_Color color = { 0x59, 0x2e, 0x03, 0xff };
-				set_tile_color(&ui->tiles[i], color);
+				set_tile_tex(&ui->tiles[i], tile_textures[DIRT]);
 			}
 		} else if (data[i] == 1) {
-			SDL_Color color = { 0xff, 0x00, 0x00, 0xff };
-			set_tile_color(&ui->tiles[i], color);
+			set_tile_tex(&ui->tiles[i], tile_textures[SPRINKLER]);
 		}
 	}
 }
@@ -140,11 +137,10 @@ void set_tile_size(Tile *tile, int width, int height) {
 	tile->rect.h = height;
 }
 
-void set_tile_color(Tile *tile, SDL_Color color) {
-	tile->color = color;
+void set_tile_tex(Tile *tile, SDL_Texture *tex) {
+	tile->tex = tex;
 }
 
 void render_tile(Tile *tile, SDL_Renderer *renderer) {
-	SDL_SetRenderDrawColor(renderer, tile->color.r, tile->color.g, tile->color.b, tile->color.a);
-	SDL_RenderFillRect(renderer, &tile->rect);
+	SDL_RenderCopy(renderer, tile->tex, NULL, &tile->rect);
 }

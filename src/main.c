@@ -37,7 +37,9 @@ void emscripten_update(void *data) {
 	}
 	load_tile_data(a->ui, a->best.data);
 
-	SDL_Color text_color = {0, 0, 0}; char text[255]; sprintf(text, "Generation: %d\nBest Fitness: %d\n", a->gen_count, organism_fitness(&a->best));
+	SDL_Color text_color = {0xFF, 0xFF, 0xFF}; 
+	char text[255]; 
+	sprintf(text, "Generation: %d\nBest Fitness: %d\n", a->gen_count, organism_fitness(&a->best));
 	load_text(a->ui->text, a->ui->renderer, text, text_color);
 	draw_ui(a->ui);	
 }
@@ -67,7 +69,9 @@ void render(void *data) {
 
 	load_tile_data(a->ui, a->best.data);
 
-	SDL_Color text_color = {0, 0, 0}; char text[255]; sprintf(text, "Generation: %d\nBest Fitness: %d\n", a->gen_count, organism_fitness(&a->best));
+	SDL_Color text_color = {0xFF, 0xFF, 0xFF}; 
+	char text[255]; 
+	sprintf(text, "Generation: %d\nBest Fitness: %d\n", a->gen_count, organism_fitness(&a->best));
 	load_text(a->ui->text, a->ui->renderer, text, text_color);
 	draw_ui(a->ui);
 }
@@ -83,7 +87,7 @@ int main() {
 	app.ui = malloc(sizeof(UI));
 	init_ui(app.ui);
 	load_font(app.ui->text, "res/Roboto-Regular.ttf");
-	set_text_position(app.ui->text, 0, 0);
+	set_text_position(app.ui->text, 10, 10);
 
 	app.p = malloc(sizeof(Population));
 	init_population(app.p, 100);
