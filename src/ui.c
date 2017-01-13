@@ -83,6 +83,8 @@ void load_tile_data(UI *ui, int *data) {
 			}
 		} else if (data[i] == 1) {
 			set_tile_tex(&ui->tiles[i], tile_textures[SPRINKLER]);
+		} else if (data[i] == 2) {
+			set_tile_tex(&ui->tiles[i], tile_textures[GROUND]);
 		}
 	}
 }

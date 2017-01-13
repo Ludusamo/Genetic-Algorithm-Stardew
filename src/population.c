@@ -21,6 +21,7 @@ void populate(Population *p) {
 	if (!p) throw_error("Population is not initialized");
 	for (int i = 0; i < p->num_organisms; i++) {
 		randomize_organism(&p->organisms[i], RANDOMIZATION_CHANCE);
+		organism_block(&p->organisms[i]);
 	}
 }
 
@@ -69,6 +70,8 @@ void breed(Population *p) {
 			cross_organisms(a, b);
 		mutate_organism(a, MUTATION_CHANCE);
 		mutate_organism(b, MUTATION_CHANCE);
+		organism_block(a);
+		organism_block(b);
 	}
 	Organism *old_population = p->organisms;
 	p->organisms = new_population;
