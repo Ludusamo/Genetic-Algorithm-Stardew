@@ -10,7 +10,7 @@ CC = clang
 COMPILER_FLAGS = -std=c99 -Wall -Iheader
 
 LINKER = clang -o
-LINKER_FLAGS = -Wall -Iheader -lSDL2 -lSDL2_ttf
+LINKER_FLAGS = -Wall -Iheader -lSDL2 -lSDL2_ttf -lSDL2_image
 
 TARGET = ga-stardew
 
