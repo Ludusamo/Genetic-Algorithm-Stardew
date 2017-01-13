@@ -17,6 +17,15 @@ void init_ui(UI *ui) {
 	}
 	ui->renderer = SDL_CreateRenderer(ui->win, -1, SDL_RENDERER_ACCELERATED);
 
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+		throw_error("SDL_image could not initialize!");
+	}
+
+	tile_textures[0] = load_texture("res/dirt.png", ui->renderer);
+	tile_textures[1] = load_texture("res/watered_dirt.png", ui->renderer);
+	tile_textures[2] = load_texture("res/sprinkler.png", ui->renderer);
+	tile_textures[3] = load_texture("res/ground.png", ui->renderer);
+
 	ui->tiles = calloc(AREA_WIDTH * AREA_WIDTH, sizeof(Tile));
 	int size = (SCREEN_WIDTH - 64) / AREA_WIDTH;
 	for (int y = 0; y < AREA_WIDTH; y++) {
@@ -40,7 +49,7 @@ void deinit_ui(UI *ui) {
 
 void clear_ui(UI *ui) {
 	if (!ui) throw_error("UI object is not allocated in memory");
-	SDL_SetRenderDrawColor(ui->renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+	SDL_SetRenderDrawColor(ui->renderer, 0x00, 0x00, 0x00, 0xFF);
 	SDL_RenderClear(ui->renderer);
 }
 
@@ -54,19 +63,26 @@ void draw_ui(UI *ui) {
 	SDL_RenderPresent(ui->renderer);
 }
 
+SDL_Texture *load_texture(const char *path, SDL_Renderer *renderer) {
+	SDL_Texture *tex = NULL;
+	SDL_Surface* surface = IMG_Load(path);
+	if (surface == NULL) throw_error("Unable to load image!");
+	tex = SDL_CreateTextureFromSurface(renderer, surface);
+	if (tex == NULL) throw_error("Unable to create texture!");
+	SDL_FreeSurface(surface);
+	return tex;
+}
+
 void load_tile_data(UI *ui, int *data) {
 	for (int i = 0; i < AREA_WIDTH * AREA_WIDTH; i++) {
 		if (data[i] == 0) {
 			if (has_adj(data, i, 1)) {
-				SDL_Color color = { 0x60, 0x98, 0xf2, 0xff };
-				set_tile_color(&ui->tiles[i], color);
+				set_tile_tex(&ui->tiles[i], tile_textures[WATERED]);
 			} else {
-				SDL_Color color = { 0x59, 0x2e, 0x03, 0xff };
-				set_tile_color(&ui->tiles[i], color);
+				set_tile_tex(&ui->tiles[i], tile_textures[DIRT]);
 			}
 		} else if (data[i] == 1) {
-			SDL_Color color = { 0xff, 0x00, 0x00, 0xff };
-			set_tile_color(&ui->tiles[i], color);
+			set_tile_tex(&ui->tiles[i], tile_textures[SPRINKLER]);
 		}
 	}
 }
@@ -121,11 +137,10 @@ void set_tile_size(Tile *tile, int width, int height) {
 	tile->rect.h = height;
 }
 
-void set_tile_color(Tile *tile, SDL_Color color) {
-	tile->color = color;
+void set_tile_tex(Tile *tile, SDL_Texture *tex) {
+	tile->tex = tex;
 }
 
 void render_tile(Tile *tile, SDL_Renderer *renderer) {
-	SDL_SetRenderDrawColor(renderer, tile->color.r, tile->color.g, tile->color.b, tile->color.a);
-	SDL_RenderFillRect(renderer, &tile->rect);
+	SDL_RenderCopy(renderer, tile->tex, NULL, &tile->rect);
 }
