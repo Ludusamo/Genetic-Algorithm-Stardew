@@ -7,9 +7,9 @@ OBJECTS :=  $(SRC_FILES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 rm = rm -f
 
 CC = emcc
-COMPILER_FLAGS = -std=c99 -Wall -Iheader -s USE_SDL=2 -s USE_SDL_TTF=2 -O2
+COMPILER_FLAGS = -std=c99 -Wall -Iheader -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -O2
 LINKER = emcc -o
-LINKER_FLAGS = -Wall -Iheader -s USE_SDL=2 -s USE_SDL_TTF=2 -werror -s ASSERTIONS=1 -s SAFE_HEAP=1 --preload-file res/ -O2
+LINKER_FLAGS = -Wall -Iheader -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -werror -s ASSERTIONS=1 -s SAFE_HEAP=1 --preload-file res/ -O2
 TARGET = ga-stardew.html
 
 
