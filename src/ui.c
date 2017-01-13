@@ -17,6 +17,15 @@ void init_ui(UI *ui) {
 	}
 	ui->renderer = SDL_CreateRenderer(ui->win, -1, SDL_RENDERER_ACCELERATED);
 
+	if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+		throw_error("SDL_image could not initialize!");
+	}
+
+	tile_textures[0] = load_texture("res/dirt.png", ui->renderer);
+	tile_textures[1] = load_texture("res/watered_dirt.png", ui->renderer);
+	tile_textures[2] = load_texture("res/sprinkler.png", ui->renderer);
+	tile_textures[3] = load_texture("res/ground.png", ui->renderer);
+
 	ui->tiles = calloc(AREA_WIDTH * AREA_WIDTH, sizeof(Tile));
 	int size = (SCREEN_WIDTH - 64) / AREA_WIDTH;
 	for (int y = 0; y < AREA_WIDTH; y++) {
@@ -52,6 +61,16 @@ void draw_ui(UI *ui) {
 	}
 	render_text(ui->text, ui->renderer);
 	SDL_RenderPresent(ui->renderer);
+}
+
+SDL_Texture *load_texture(const char *path, SDL_Renderer *renderer) {
+	SDL_Texture *tex = NULL;
+	SDL_Surface* surface = IMG_Load(path);
+	if (surface == NULL) throw_error("Unable to load image!");
+	tex = SDL_CreateTextureFromSurface(renderer, surface);
+	if (tex == NULL) throw_error("Unable to create texture!");
+	SDL_FreeSurface(surface);
+	return tex;
 }
 
 void load_tile_data(UI *ui, int *data) {

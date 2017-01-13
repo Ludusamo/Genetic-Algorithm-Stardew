@@ -4,15 +4,19 @@
 #ifdef __EMSCRIPTEN__
 	#include <SDL.h>
 	#include <SDL_ttf.h>
+	#include <SDL_image.h>
 #else
 	#include <SDL2/SDL.h>
 	#include <SDL2/SDL_ttf.h>
+	#include <SDL2/SDL_image.h>
 #endif
 #include "organism.h"
 #include "error.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 640
+
+SDL_Texture *tile_textures[4];
 
 typedef struct {
 	SDL_Rect rect;
@@ -40,6 +44,8 @@ void deinit_ui(UI *ui);
 void clear_ui(UI *ui);
 
 void draw_ui(UI *ui);
+
+SDL_Texture *load_texture(const char *path, SDL_Renderer *renderer);
 
 void load_tile_data(UI *ui, int *data);
 
