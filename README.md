@@ -6,6 +6,9 @@ This is a project to create Genetic Algorithm to identify optimal arrangements o
 
 For additional information, check out my blog posts on this topic at my [blog](ludusamo.com/Blog). The first post is [here](http://ludusamo.com/Blog/side-project-genetic-algorithms/index.html).
 
+### Picture of Current Version:
+![Imgur](http://i.imgur.com/dCbQJrQ.png)
+
 ## How to Use
 
 ### In Your Browser
